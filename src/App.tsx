@@ -1,12 +1,21 @@
 import React from 'react';
-import { Routes, Route, Navigate, NavLink } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  NavLink,
+  useLocation,
+} from 'react-router-dom';
 import { PeoplePage } from './components/PeoplePage';
+import { SearchLink } from './components/SearchLink';
 import './App.scss';
 
-const getLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `navbar-item ${isActive ? 'has-background-grey-lighter' : ''}`;
-
 export const App: React.FC = () => {
+  const { pathname } = useLocation();
+
+  const getLinkClass = (isActive: boolean) =>
+    `navbar-item ${isActive ? 'has-background-grey-lighter' : ''}`;
+
   return (
     <div data-cy="app">
       <nav
@@ -16,13 +25,20 @@ export const App: React.FC = () => {
       >
         <div className="container">
           <div className="navbar-brand">
-            <NavLink to="/" className={getLinkClass}>
+            <NavLink
+              to="/"
+              className={({ isActive }) => getLinkClass(isActive)}
+            >
               Home
             </NavLink>
 
-            <NavLink to="/people" className={getLinkClass}>
+            <SearchLink
+              to="/people"
+              params={{}}
+              className={getLinkClass(pathname.startsWith('/people'))}
+            >
               People
-            </NavLink>
+            </SearchLink>
           </div>
         </div>
       </nav>
